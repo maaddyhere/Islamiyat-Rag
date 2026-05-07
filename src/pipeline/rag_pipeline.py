@@ -23,7 +23,7 @@ class RAGPipeline:
         print("GROQ_API_KEY نہیں ملا؛ تلاش شدہ passages دکھا رہا ہوں۔\n")
         for idx, doc in enumerate(results, start=1):
             print(f"---- نتیجہ {idx} (score={doc['score']:.4f}) ----")
-            print(f"Chapter: {doc.get('chapter', '')}")
-            print(f"Lesson: {doc.get('lesson', '')}")
+            print(f"باب: {doc.get('chapter', '')}")
+            print(f"سبق: {doc.get('lesson', '')}")
             print(doc.get("text", ""))
             print()

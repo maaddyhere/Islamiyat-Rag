@@ -24,6 +24,8 @@ from src.config.settings import (
     INDEX_DIR,
     METADATA_PATH,
     PROCESSED_DIR,
+    RAW_DIR,
+    RAW_TEXT_CANDIDATES,
     RAW_TEXT_PATH,
 )
 from src.ingestion.preprocessor import run_preprocessing
@@ -65,8 +67,14 @@ def main() -> None:
     else:
         if not RAW_TEXT_PATH.exists():
             logger.error("Raw text file not found: %s", RAW_TEXT_PATH)
-            logger.error("Place your OCR text file at: %s", RAW_TEXT_PATH)
+            logger.error("Checked these paths:")
+            for path in RAW_TEXT_CANDIDATES:
+                logger.error("  - %s", path)
             sys.exit(1)
+
+        PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
+        INDEX_DIR.mkdir(parents=True, exist_ok=True)
+        RAW_DIR.mkdir(parents=True, exist_ok=True)
 
         logger.info("Step 1/3 — Preprocessing raw text...")
         chunks = run_preprocessing(

@@ -2,11 +2,6 @@ import os, subprocess, shutil
 from langchain_core.documents import Document
 from src.config.settings import PDF_PATH
 
-BIDI_CONTROLS = (
-    '\u200e', '\u200f', '\u202a', '\u202b', '\u202c',
-    '\u202d', '\u202e', '\u2066', '\u2067', '\u2068', '\u2069',
-)
-
 def extract_text(pdf_path=PDF_PATH) -> str:
     pdftotext = shutil.which("pdftotext")
     if not pdftotext:
@@ -17,7 +12,8 @@ def extract_text(pdf_path=PDF_PATH) -> str:
     )
     if proc.returncode != 0:
         raise RuntimeError(f"pdftotext failed: {proc.stderr}")
-    return "".join(ch for ch in proc.stdout if ch not in BIDI_CONTROLS)
+    # Preserve bidi control characters so Urdu and Arabic text retain their correct directionality.
+    return proc.stdout
 
 def build_documents(full_text: str, pdf_path=PDF_PATH) -> list[Document]:
     pages = full_text.split("\x0c")
